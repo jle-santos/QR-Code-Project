@@ -21,11 +21,11 @@ function SampleMatrix = SamplingGrid(A, B, C, D, NumSample)
     PointSample = struct;
     
     for Row = 0:NumSample - 1
-       PointAC.x = round(A(1) + AC.dSampleX*Row*Factor);
-       PointAC.y = round(A(2) + AC.dSampleY*Row*Factor); 
+       PointAC.x = round(A(1) - AC.dSampleX*Row*Factor);
+       PointAC.y = round(A(2) - AC.dSampleY*Row*Factor); 
        
-       PointBD.x = round(B(1) + BD.dSampleX*Row*Factor);
-       PointBD.y = round(B(2) + BD.dSampleY*Row*Factor); 
+       PointBD.x = round(B(1) - BD.dSampleX*Row*Factor);
+       PointBD.y = round(B(2) - BD.dSampleY*Row*Factor); 
        
        
        for Col = 0:NumSample - 1
