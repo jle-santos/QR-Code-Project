@@ -6,7 +6,7 @@ function SampleMatrix = SamplingGrid(A, B, C, D, NumSample)
 %   .
 %   |
 %   C -------------- D
-    Factor = 1.1;
+    Factor = 1.05;
     
     SampleMatrix = zeros(NumSample, NumSample, 2);
 
