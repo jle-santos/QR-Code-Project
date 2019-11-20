@@ -1,0 +1,13 @@
+function [outputArg1,outputArg2] = SamplingGrid(A, B, C, D)
+%   A -------------- B
+%
+%
+%
+%
+%
+    dAC = norm(A - C);
+
+
+
+end
+
