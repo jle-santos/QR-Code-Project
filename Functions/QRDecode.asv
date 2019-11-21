@@ -1,4 +1,4 @@
-function [Msg, Data] = QRDecode(Code)
+function Data = QRDecode(Code)
 
     T = graythresh(Code);
     BiCode = imbinarize(Code, T);
@@ -78,14 +78,9 @@ function [Msg, Data] = QRDecode(Code)
     
     binChar = zeros(1:7);
     
-    Msg = strings([1,11]);
+    for Character = 1:11
+        binVector = DataMatr
     
-    for k = 1:11
-        binVector = DataMatrix(k, :);
-        
-        charDEC = bin2dec(num2str(binVector));
-        Character = char(charDEC);
-        Msg(1, k) = Character;
     end
     
 %     for i = 0:10
