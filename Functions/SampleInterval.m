@@ -7,8 +7,8 @@ function AC = SamplingInterval(A, C, NumSamples)
     AC.dX = A(1) - C(1);
     AC.dPhi = atand(AC.dY/AC.dX);
     AC.dStep = AC.diff/NumSamples;
-    AC.dSampleY = AC.dStep*sind(AC.dPhi);
-    AC.dSampleX = AC.dStep*cosd(AC.dPhi);
+    AC.dSampleY = abs(AC.dStep*sind(AC.dPhi));
+    AC.dSampleX = abs(AC.dStep*cosd(AC.dPhi));
     
 end
 

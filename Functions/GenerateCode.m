@@ -1,4 +1,4 @@
-function code = GenerateCode(string)
+function [code, data] = GenerateCode(string)
 %Create empty string
 if length(string) > 11
     error('Max number of characters is 11');
