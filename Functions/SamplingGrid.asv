@@ -8,9 +8,6 @@ function SampleMatrix = SamplingGrid(Guides, NumSample)
 %   C -----------S
 
 NumMark = length(Guides);
-SampleMatrix = zeros(2, NumSample);
-
-
 
 
 
