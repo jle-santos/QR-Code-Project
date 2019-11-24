@@ -88,6 +88,8 @@ function [Msg, Data] = QRDecode(Code)
         Msg(1, k) = Character;
     end
     
+    Msg = strjoin(Msg);
+    
 %     for i = 0:10
 %         
 %         binChar = Data(1 + 7*i: 7 + 7*i);
