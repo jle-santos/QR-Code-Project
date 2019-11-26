@@ -1,43 +1,9 @@
 function [Msg, Data] = QRDecode(Code)
-
-    T = graythresh(Code);
-    BiCode = imbinarize(Code, T);
-    BiCode = imcomplement(BiCode);
     
-    %Data = zeros(1, 83);
-
-    DataBit = 0;
-    
-%     for Col = 1:9
-%         
-%         if Col <= 2
-%             MinRow = 3;
-%             MaxRow = 9;
-%             
-%         elseif Col >= 3 && Col <= 6
-%             MinRow = 1;
-%             MaxRow = 10;
-%             
-%         else
-%             MinRow  = 1;
-%             MaxRow = 9;
-%         end
-%         
-%         for Row = 1:11
-%             Value = BiCode(Row, Col);
-%             
-%             if Row >= MinRow && Row <= MaxRow
-%                 DataBit = DataBit + 1;
-%                 Data(DataBit) = Value;
-%                 
-%             end
-%             
-%             
-%         end
-%     end
-    
+    %Each row corresponds to 1 byte (ASCII)
     DataMatrix = zeros(11, 7);
-
+    
+    %Decoder template
     Template = [ ...
     1 0 4 5 7 8 10 11 12 0 1; ...
     0 0 4 5 7 8 10 11 12 0 0; ...
@@ -54,14 +20,16 @@ function [Msg, Data] = QRDecode(Code)
     BitIndex = 1;
     CharIndex = 2;
     
+    %Iterate through code
     for j = 1:11
         for i = 1:11
             CharBit = Template(i, j);
             
             if CharBit == CharIndex
-                DataMatrix(CharIndex - 1, BitIndex) = BiCode(i, j);
+                DataMatrix(CharIndex - 1, BitIndex) = Code(i, j);
                 BitIndex = BitIndex + 1;
                 
+                %Byte exceeded, loop back
                 if BitIndex > 7
                     CharIndex = CharIndex + 1;
                     BitIndex = 1;
@@ -72,31 +40,21 @@ function [Msg, Data] = QRDecode(Code)
         end
     end
     
+    %Return byte array
     Data = DataMatrix;
-
-%    Msg = '12345678900';
     
-    binChar = zeros(1:7);
-    
+    %String message
     Msg = strings([1,11]);
     
+    %Convert bytes to characters
     for k = 1:11
-        binVector = DataMatrix(k, :);
-        
+        binVector = DataMatrix(k, :); 
         charDEC = bin2dec(num2str(binVector));
         Character = char(charDEC);
         Msg(1, k) = Character;
     end
     
+    %Concatenate all characters together
     Msg = strjoin(Msg);
-    
-%     for i = 0:10
-%         
-%         binChar = Data(1 + 7*i: 7 + 7*i);
-%         binVector = (reshape(binChar,[],7));
-%         Character = char(bi2de(binVector));
-%         Character = binaryVectorToDecimal(binChar);
-%         Msg(i + 1) = char(Character);
-%     end
 end
 
