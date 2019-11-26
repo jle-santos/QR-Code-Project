@@ -4,7 +4,7 @@ ImageParameters = struct;
 
 %TestImage1 = imsharpen(TestImage1);
 
-TestImage1 = imresize(TestImage1, 0.2);
+TestImage1 = imresize(TestImage1, 0.8);
 
 TestG = rgb2gray(TestImage1);
 
@@ -155,9 +155,12 @@ for G = 1:PotentialMarkers
                 BPos = Cornerstones(B).Centroid;
                 CPos = Cornerstones(C).Centroid;
                 
-                AveWidth = (Cornerstones(A).MinorAxisLength + Cornerstones(B).MinorAxisLength ...
-                            + Cornerstones(C).MinorAxisLength)/3;
-                
+                AveWidth = Guides(G).SGuide.MinorAxisLength;
+                %AveWidth = (min([Cornerstones(A).MinorAxisLength, Cornerstones(B).MinorAxisLength, ...
+                %                Cornerstones(C).MinorAxisLength]));
+                %(Cornerstones(A).MinorAxisLength + Cornerstones(B).MinorAxisLength ...
+                            %+ Cornerstones(C).MinorAxisLength)/3;
+                        
                 dAB = norm(APos - BPos);
                 dAC = norm(APos - CPos);
                 dCB = norm(CPos - BPos);
@@ -166,16 +169,16 @@ for G = 1:PotentialMarkers
                 
                 Angle = acos((dAB^2 + dAC^2 - dCB^2)/(2*dAB*dAC))*180/pi;
                 
-                MinSide = 7*AveWidth;
-                MaxSide = 12*AveWidth;
+                MinSide = 5*AveWidth;
+                MaxSide = 10*AveWidth;
                 
-                MinDiag = 10*AveWidth;
+                MinDiag = 8*AveWidth;
                 MaxDiag = 17*AveWidth;
                 
-                MinL = 3*AveWidth;
+                MinL = 2*AveWidth;
                 MaxL = 7*AveWidth;
                 
-                MinS = 6*AveWidth;
+                MinS = 5*AveWidth;
                 MaxS = 10*AveWidth;
                 
                 if dAB > MinSide && dAB < MaxSide 
@@ -183,7 +186,8 @@ for G = 1:PotentialMarkers
                         if dCB > MinDiag && dCB < MaxDiag 
                             if dCS > MinS && dCS < MaxS  
                                 if dBL > MinL && dBL < MaxL ...
-                                    && Angle > 75 && Angle < 100
+                                    && Angle > 75 && Angle < 100 ...
+                                    && AveWidth < dAB
                     
                                 ConfirmedMarkers = ConfirmedMarkers + 1;
                            
@@ -202,8 +206,8 @@ end
 SamplingGrid = zeros(11,11,2);
 
 %Plot markers
-% imshow(L2);
-% hold on
+ imshow(L2);
+ hold on
 for i = 1:PotentialMarkers
     Pos1 = Guides(i).SGuide.Centroid;
     Pos2 = Guides(i).LGuide.Centroid;
@@ -238,11 +242,11 @@ for i = 1:PotentialMarkers
     SamplingGrid(1, :, 1) = VectorX(1, :);
     SamplingGrid(1, :, 2) = VectorX(2, :);
     
-%     for j = 1:11
-%         for k = 1:11
-%             plot(SamplingGrid(j,k,1), SamplingGrid(j,k,2), 'r+', 'LineWidth', 2, 'MarkerSize', 10);
-%         end
-%     end
+    for j = 1:11
+        for k = 1:11
+            plot(SamplingGrid(j,k,1), SamplingGrid(j,k,2), 'r+', 'LineWidth', 2, 'MarkerSize', 10);
+        end
+    end
     
     Code = logical((zeros(11,11)));
 
@@ -265,6 +269,6 @@ for i = 1:PotentialMarkers
     ImageParameters(i).ThreshImage = L2;
     ImageParameters(i).Data = data;
 end
-% hold off
+ hold off
 end
 

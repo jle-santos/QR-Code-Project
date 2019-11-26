@@ -1,6 +1,6 @@
 function [Msg, Data] = QRDecode(Code)
     
-    Code = imcomplement(Code);
+    Code = (~Code);
     %Each row corresponds to 1 byte (ASCII)
     DataMatrix = zeros(11, 7);
     
