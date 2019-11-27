@@ -3,8 +3,15 @@ function ImageParameters = DecodeImage(TestImage1)
 ImageParameters = struct;
 
 %TestImage1 = imsharpen(TestImage1);
+[Width, Height, z] = size(TestImage1);
 
-TestImage1 = imresize(TestImage1, 0.2);
+if Width > 800 || Height > 800
+    ScaleFactor = 0.2;
+else
+    ScaleFactor = 0.8;
+end
+
+TestImage1 = imresize(TestImage1, ScaleFactor);
 
 TestG = rgb2gray(TestImage1);
 
@@ -166,6 +173,8 @@ for G = 1:PotentialMarkers
                 dCB = norm(CPos - BPos);
                 dCS = norm(CPos - GuideS.Centroid);
                 dBL = norm(BPos - GuideL.Centroid);
+                dAS = norm(APos - GuideS.Centroid);
+                dBS = norm(BPos - GuideS.Centroid);
                 
                 Angle = acos((dAB^2 + dAC^2 - dCB^2)/(2*dAB*dAC))*180/pi;
                 
@@ -187,8 +196,9 @@ for G = 1:PotentialMarkers
                             if dCS > MinS && dCS < MaxS  
                                 if dBL > MinL && dBL < MaxL ...
                                     && Angle > 75 && Angle < 100 ...
-                                    && AveWidth < dAB
-                    
+                                    && AveWidth < dAB ...
+                                    && dBS > MinSide && dBS < 14*AveWidth ...
+                                    && dAS > MinSide && dAS < 14*AveWidth 
                                 ConfirmedMarkers = ConfirmedMarkers + 1;
                                 
                                 Guides(G).A = Cornerstones(A);
@@ -208,6 +218,7 @@ SamplingGrid = zeros(11,11,2);
 %Plot markers
  imshow(L2);
  hold on
+ 
 for i = 1:PotentialMarkers
     Pos1 = Guides(i).SGuide.Centroid;
     Pos2 = Guides(i).LGuide.Centroid;
@@ -268,6 +279,7 @@ for i = 1:PotentialMarkers
     ImageParameters(i).Code = Code;
     ImageParameters(i).ThreshImage = L2;
     ImageParameters(i).Data = data;
+    ImageParameters(i).MarkerInfo = Guides(i);
 end
  hold off
 end
