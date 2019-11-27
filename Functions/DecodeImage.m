@@ -4,7 +4,7 @@ ImageParameters = struct;
 
 %TestImage1 = imsharpen(TestImage1);
 
-TestImage1 = imresize(TestImage1, 0.8);
+TestImage1 = imresize(TestImage1, 0.2);
 
 TestG = rgb2gray(TestImage1);
 
@@ -14,7 +14,7 @@ L2 = xor(ones(size(TestG)), L2);
 AveFilter = ones(3,3)*1/9;
 L2 = imfilter(L2, AveFilter);
 
-se = strel('disk', 1, 8);
+se = strel('disk',1, 8);
 
 L2 = imerode(L2, se);
 
@@ -66,7 +66,7 @@ for i = 1:TotalShapes
     ShapeRatio = ShapeLength/ShapeWidth;
     
     %Store Guides
-    if ShapeRatio > MinSRatio && ShapeRatio < MaxSRatio && ShapeSolid > 0.6 && Shape.Area > 6
+    if ShapeRatio > MinSRatio && ShapeRatio < MaxSRatio && ShapeSolid > 0.6 && Shape.Area > 10
         PotentialGuideS = PotentialGuideS + 1;
 
         GuidelinesS(PotentialGuideS).Centroid = ShapePos;
@@ -190,7 +190,7 @@ for G = 1:PotentialMarkers
                                     && AveWidth < dAB
                     
                                 ConfirmedMarkers = ConfirmedMarkers + 1;
-                           
+                                
                                 Guides(G).A = Cornerstones(A);
                                 Guides(G).B = Cornerstones(B);
                                 Guides(G).C = Cornerstones(C);
